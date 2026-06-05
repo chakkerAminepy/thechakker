@@ -336,7 +336,33 @@
   /* ─── Nav Active State ──────────────────────────────── */
   const page = document.body.dataset.page;
   if (page) {
-    document.querySelectorAll(`.nav__center a[data-page="${page}"]`).forEach(a => a.classList.add('is-active'));
+    document.querySelectorAll(`.nav__center a[data-page="${page}"], .mobile-menu__links a[data-page="${page}"]`)
+      .forEach(a => a.classList.add('is-active'));
+  }
+
+  /* ─── Burger / Mobile Menu ──────────────────────────── */
+  const burger = document.querySelector('.nav__burger');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  if (burger && mobileMenu) {
+    const open  = () => {
+      burger.classList.add('is-open');
+      burger.setAttribute('aria-expanded', 'true');
+      mobileMenu.classList.add('is-open');
+      mobileMenu.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    };
+    const close = () => {
+      burger.classList.remove('is-open');
+      burger.setAttribute('aria-expanded', 'false');
+      mobileMenu.classList.remove('is-open');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    };
+    burger.addEventListener('click', () =>
+      burger.classList.contains('is-open') ? close() : open()
+    );
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
   }
 
   /* ─── Nav Scroll Background ────────────────────────── */
